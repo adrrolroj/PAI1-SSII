@@ -33,17 +33,17 @@ public class GenerateRandomFiles {
 				BufferedWriter buffWrite3 = new BufferedWriter(fileWrite3);
 				buffWrite3.write(randomContend);
 				buffWrite3.close();
-				
+
 				String hashContent = Hashing.hash(container1);
 				valuesMap.put(randomName, hashContent);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		GenerateMapFile.exportNewTreeMap(valuesMap);
 	}
-	private static String randomString(final Integer lenght) {
+	public static String randomString(final Integer lenght) {
 		String res = "";
 		int leftLimit = 97; // letter 'a'
 		int rightLimit = 122; // letter 'z'
