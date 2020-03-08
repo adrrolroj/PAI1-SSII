@@ -1,11 +1,10 @@
 
-package main;
+package test;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -17,9 +16,7 @@ import hash.VerificationHash;
 public class VerificatorForOneMonth {
 
 	public static void main(final String[] args) throws InterruptedException, IOException {
-		int dia = 0;
-		int counter = 0;
-		Date date = new Date();
+		int dias = 30;
 		int archivosCorrectos = 0;
 		int archivosVerifFallida = 0;
 		int archivosFallido1Contenedor = 0;
@@ -37,24 +34,11 @@ public class VerificatorForOneMonth {
 		ModificatorThread modificador = new ModificatorThread(map.keySet());
 		modificador.start();
 		//Comprobamos integridad de dss_map.txt con su hash en hash_dss_map.txt
-		while (counter <= 30) {
-	
 		String actualHash = Hashing.hash("dss_map.txt");
 		String originalHash = Hashing.readFile("hash_dss_map.txt");
 		if (actualHash.equals(originalHash)) {
 			Set<String> listaArchivos = map.keySet();
-			
-			if (dia != 0 && dia == new Date().getDay()) {
-				dia = new Date().getDay();
-				date = new Date();
-				Thread.sleep(3600000);
-			}
-			else {
-				counter++;
-
-				dia = new Date().getDay();
-				date = new Date();
-
+			while (dias > 0) {
 				int comprobados = 0;
 				int archivosCorrectosDia = 0;
 				int archivosVerifFallidaDia = 0;
@@ -80,8 +64,9 @@ public class VerificatorForOneMonth {
 					comprobados++;
 
 				}
-				informe = informe + "DIA " + (new Date().getDay()) + "-" + date.getMonth()+  ": Comprobados: [" + comprobados + "], Correctos [" + archivosCorrectosDia + "], Fallos 1 contenedor [" + archivosFallido1ContenedorDia + "], Fallos 2 contenedor [" + archivosFallido2ContenedorDia
+				informe = informe + "DIA " + (31 - dias) + ": Comprobados: [" + comprobados + "], Correctos [" + archivosCorrectosDia + "], Fallos 1 contenedor [" + archivosFallido1ContenedorDia + "], Fallos 2 contenedor [" + archivosFallido2ContenedorDia
 					+ "], Fallos de integridad [" + archivosVerifFallidaDia + "]" + "\n";
+				dias--;
 				Thread.sleep(800);
 			}
 			informe = informe + "RESULTADO FINAL: Comprobaciones correctas [" + archivosCorrectos + "], Fallos totales 1 contenedor [" + archivosFallido1Contenedor + "], Fallos totales 2 contenedor [" + archivosFallido2Contenedor
@@ -89,8 +74,6 @@ public class VerificatorForOneMonth {
 
 		} else {
 			System.out.println("Fallo integridad archivo de datos");
-		}
-		
 		}
 		modificador.ejecutar = false;
 		System.out.println(informe);
