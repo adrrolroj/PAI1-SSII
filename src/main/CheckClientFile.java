@@ -12,12 +12,13 @@ public class CheckClientFile {
 
 	public static HashMap<String, String> checkClientFile(String fichero, String token, String hash) throws FileNotFoundException {
 		HashMap<String, String> res = new HashMap<String, String>();
+		
 		//paso 1: Compruebo el archivo en la estructura de datos:
 		TreeMap<String, String> treeMap = ReadFromMapFile.readFromFile("dss_map.txt");
 		String hash_fichero = "";
 		hash_fichero = treeMap.get(fichero);
 		
-		if(hash_fichero == "") {
+		if(hash_fichero == "" || hash_fichero == null) {
 			res.put("hash", hash_fichero);
 			res.put("mac", "VERIFICATION_FAILED_NOT_FOUND");
 			return res;
