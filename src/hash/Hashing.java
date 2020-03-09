@@ -24,7 +24,7 @@ public class Hashing {
 		return hashHex;
 	}
 
-	private static String readFile(final String fichero) {
+	public static String readFile(final String fichero) {
 		String res = "";
 		try {
 			File file = new File(fichero);

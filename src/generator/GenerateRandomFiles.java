@@ -5,10 +5,15 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.TreeMap;
+
+import dataStructure.GenerateMapFile;
+import hash.Hashing;
 
 public class GenerateRandomFiles {
 
-	public static void generateRandomFiles(final Integer numFiles) {
+	public static void generateRandomFiles(final Integer numFiles) throws IOException {
+		TreeMap<String, String> valuesMap = new TreeMap<String, String>();
 		for (int i = 0; i < numFiles; i++) {
 			try {
 				String randomName = GenerateRandomFiles.randomString(8) + ".txt";
@@ -28,12 +33,17 @@ public class GenerateRandomFiles {
 				BufferedWriter buffWrite3 = new BufferedWriter(fileWrite3);
 				buffWrite3.write(randomContend);
 				buffWrite3.close();
+
+				String hashContent = Hashing.hash(container1);
+				valuesMap.put(randomName, hashContent);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+
+		GenerateMapFile.exportNewTreeMap(valuesMap);
 	}
-	private static String randomString(final Integer lenght) {
+	public static String randomString(final Integer lenght) {
 		String res = "";
 		int leftLimit = 97; // letter 'a'
 		int rightLimit = 122; // letter 'z'
